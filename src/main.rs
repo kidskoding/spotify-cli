@@ -2,8 +2,8 @@ use std::env;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    if(args[0] == "spotify") {
-        if(args.len() == 1) {
+    if args[0] == "spotify" {
+        if args.len() == 1 {
             welcome();
         } else {
             match args[1].as_str() {
