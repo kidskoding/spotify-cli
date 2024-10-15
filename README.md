@@ -14,7 +14,7 @@ A Command Line Interface (CLI) for Spotify built using Rust, where users can man
   </ul>
 </ol>
 
-### Mac and Linux: 
+### UNIX Systems (Mac and Linux): 
 <ol>
   <li><code>cd ~/Downloads/spotify-cli</code></li>
   <li><code>sudo cp target/release/spotify usr/local/bin</code></li>
