@@ -9,6 +9,16 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
+if [ ! -f "target/release/spotify" ]; then
+    echo "Source file 'target/release/spotify' does not exist. Please build the project first."
+    exit 1
+fi
+cp "target/release/spotify" "/usr/local/bin"
+if [ $? -ne 0 ]; then
+    echo "Failed to install spotify command. Please try again."
+    exit 1
+fi
+
 mkdir -p "$MAN_DIR"
 if [ $? -ne 0 ]; then
     echo "Failed to install spotify command. Please try again."
