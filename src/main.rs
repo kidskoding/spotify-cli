@@ -14,3 +14,4 @@ fn main() {
 fn welcome() {
     println!("usage: spotify [-v | --version] [-h | --help] [new]");
 }
+
