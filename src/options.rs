@@ -4,6 +4,7 @@ extern crate spotify;
 use spotify::Spotify;
 
 pub fn handle_args(args: Vec<String>) {
+    // PR test #2
     if args.len() < 2 {
         println!("Usage: spotify-cli [options]");
         println!("-v, --version    Show version");
