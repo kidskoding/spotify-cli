@@ -1,3 +1,4 @@
 target
 spotify.1
 .env
+.token
