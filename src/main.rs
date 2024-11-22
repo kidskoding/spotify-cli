@@ -2,6 +2,7 @@ use clap::{Parser, Subcommand};
 
 mod auth;
 mod query;
+mod volume;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -18,11 +19,10 @@ enum Commands {
     // query what track is currently playing
     Query,
 
-    // literally just for testing how clap works
+    // change volume by volume_delta
     #[command(arg_required_else_help = true)]
-    Test {
-        // value to logged to prove that the test works
-        value: i32,
+    Volume {
+        volume_delta: i8,
     },
 }
 
@@ -36,8 +36,8 @@ async fn main() {
         Commands::Query => {
             query::query().await;
         }
-        Commands::Test { value } => {
-            println!("test called with value of {:?}", value)
+        Commands::Volume { volume_delta } => {
+            volume::change_volume(volume_delta).await;
         }
     }
     println!("{:?}", cli);

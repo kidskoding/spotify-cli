@@ -1,25 +1,18 @@
 use rspotify::prelude::BaseClient;
-use rspotify::{clients::OAuthClient, model::AdditionalType, AuthCodeSpotify};
+use rspotify::{clients::OAuthClient, model::AdditionalType};
 
-use std::fs::File;
-use std::io::Read;
+use crate::auth;
 
 pub async fn query() {
-    let mut file = File::open(".token").expect("couldn't find .token file, maybe try auth first?");
-    let mut contents = String::new();
-    let _ = file.read_to_string(&mut contents);
+    let spotify = auth::spotify_from_token();
 
-    let token = serde_json::from_str(&contents).unwrap();
-    let spotify = AuthCodeSpotify::from_token(token);
-
-    // Running the requests
     let additional_types = [AdditionalType::Track];
     let results = spotify
         .current_playing(None, Some(&additional_types))
         .await
         .expect("client error connecting to spotify");
 
-    let playing_item = match results {
+    let playable_item = match results {
         None => {
             println!("no current playing context!");
             return;
@@ -29,7 +22,7 @@ pub async fn query() {
 
     let playing_track = spotify
         .track(
-            playing_item
+            playable_item
                 .id()
                 .unwrap()
                 .try_into()
