@@ -1,3 +1,4 @@
+use rspotify::prelude::BaseClient;
 use rspotify::{clients::OAuthClient, model::AdditionalType, AuthCodeSpotify};
 
 use std::fs::File;
@@ -13,7 +14,30 @@ pub async fn query() {
 
     // Running the requests
     let additional_types = [AdditionalType::Track];
-    let results = spotify.current_playing(None, Some(&additional_types)).await;
+    let results = spotify
+        .current_playing(None, Some(&additional_types))
+        .await
+        .expect("client error connecting to spotify");
 
-    println!("Response: {results:#?}");
+    let playing_item = match results {
+        None => {
+            println!("no current playing context!");
+            return;
+        }
+        Some(x) => x.item.unwrap(),
+    };
+
+    let playing_track = spotify
+        .track(
+            playing_item
+                .id()
+                .unwrap()
+                .try_into()
+                .expect("invalid track"),
+            None,
+        )
+        .await
+        .expect("error connecting to spotify");
+
+    println!("currently playing: {}", playing_track.name)
 }
