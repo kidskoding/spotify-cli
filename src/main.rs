@@ -2,6 +2,7 @@ use clap::{Parser, Subcommand};
 
 mod auth;
 mod follow;
+mod library;
 mod playlist;
 mod query;
 mod volume;
@@ -37,6 +38,18 @@ enum Commands {
     #[command(arg_required_else_help = true)]
     Unfollow {
         artist_id: String,
+    },
+
+    // like track from id
+    #[command(arg_required_else_help = true)]
+    Add {
+        track_id: String,
+    },
+
+    // unlike track from id
+    #[command(arg_required_else_help = true)]
+    Remove {
+        track_id: String,
     },
 
     // various commands related to controlling playlists
@@ -101,6 +114,12 @@ async fn main() {
                 println!("invalid command! valid commands are 'list', 'add', and 'remove'");
             }
         },
+        Commands::Add { ref track_id } => {
+            library::add(track_id).await;
+        }
+        Commands::Remove { ref track_id } => {
+            library::remove(track_id).await;
+        }
     }
     println!("{:?}", cli);
 }

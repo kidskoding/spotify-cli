@@ -29,7 +29,8 @@ what we have worked on:
 - follow and unfollow artists by id
 
 what we want:
-- playlist management: add and remove from playlist
-- create and delete playlists
-- follow artists by name
-- add songs to library by name
+- [x] playlist management: add and remove from playlist
+- [ ] create and delete playlists
+- [ ] follow artists by name
+- [ ] add songs to library by name
+- [ ] figure out a way to search by name and get an id

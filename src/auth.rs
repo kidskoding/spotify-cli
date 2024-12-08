@@ -13,7 +13,8 @@ pub async fn auth() {
         "user-modify-playback-state",
         "user-follow-modify",
         "playlist-modify-public",
-        "playlist-modify-private"
+        "playlist-modify-private",
+        "user-library-modify"
     ))
     .unwrap();
 
