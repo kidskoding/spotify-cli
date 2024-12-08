@@ -1,9 +1,8 @@
 use clap::{Parser, Subcommand};
-use rspotify::{model::UserId, ClientCredsSpotify, Credentials};
-use spotify_cli::*;
 
 mod auth;
 mod follow;
+mod playlist;
 mod query;
 mod volume;
 
@@ -13,26 +12,6 @@ struct Cli {
     #[command(subcommand)]
     command: Commands,
 }
-
-// pub mod options;
-
-// extern crate spotify;
-// use spotify::Spotify;
-
-// use options::handle_args;
-// use std::env;
-
-//#[tokio::main]
-//async fn main (){
-//    let creds = Credentials::from_env().unwrap();
-//    let spotify = ClientCredsSpotify::new(creds);
-//    spotify.request_token().await.unwrap();
-//    let user_id: UserId<'_> = UserId::from_id("9saqdc9ax0rehxsiyhydswftg").unwrap();
-//    let result = playlists_list(spotify.clone(), user_id).await;
-//    for playlist in result.clone() {
-//        println!("{}", playlist.name);
-//   }
-//    let __ = item_list_from_playlist(spotify.clone(), result[1].id.clone()).await;
 
 #[derive(Subcommand, Debug)]
 enum Commands {
@@ -51,13 +30,25 @@ enum Commands {
     // follow artist from id
     #[command(arg_required_else_help = true)]
     Follow {
-        artist_id: Box<str>,
+        artist_id: String,
     },
 
     // unfollow artist from id
     #[command(arg_required_else_help = true)]
     Unfollow {
-        artist_id: Box<str>,
+        artist_id: String,
+    },
+
+    // various commands related to controlling playlists
+    Playlist {
+        #[clap(index = 1)]
+        command: String,
+
+        #[clap(default_value = "", index = 2)]
+        first: String,
+
+        #[clap(default_value = "", index = 3)]
+        second: String,
     },
 }
 
@@ -80,6 +71,27 @@ async fn main() {
         Commands::Unfollow { ref artist_id } => {
             follow::unfollow(artist_id).await;
         }
+        Commands::Playlist {
+            ref command,
+            ref first,
+            ref second,
+        } => match command.as_str() {
+            "list" => {
+                if first != "" && second != "" {
+                    println!("too many arguments! should only take one");
+                }
+                playlist::list(&first).await;
+            }
+            "add" => {
+                println!("not implemented yet...")
+            }
+            "remove" => {
+                println!("not implemented yet...")
+            }
+            _ => {
+                println!("invalid command! valid commands are 'list', 'add', and 'remove'");
+            }
+        },
     }
     println!("{:?}", cli);
 }
