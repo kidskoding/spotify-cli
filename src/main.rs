@@ -2,6 +2,7 @@ use clap::{CommandFactory, Parser, Subcommand};
 
 mod auth;
 mod follow;
+mod library;
 mod playlist;
 mod query;
 mod volume;
@@ -36,6 +37,30 @@ enum Commands {
         artist_id: String,
     },
     Version,
+    
+    // like track from id
+    #[command(arg_required_else_help = true)]
+    Add {
+        track_id: String,
+    },
+
+    // unlike track from id
+    #[command(arg_required_else_help = true)]
+    Remove {
+        track_id: String,
+    },
+
+    // various commands related to controlling playlists
+    Playlist {
+        #[clap(index = 1)]
+        command: String,
+
+        #[clap(default_value = "", index = 2)]
+        first: String,
+
+        #[clap(default_value = "", index = 3)]
+        second: String,
+    },
 }
 
 #[tokio::main]
@@ -60,6 +85,42 @@ async fn main() {
         }
         Commands::Version => {
             print!("{}", Cli::command().render_version());
+        }
+        Commands::Playlist {
+            ref command,
+            ref first,
+            ref second,
+        } => match command.as_str() {
+            "list" => {
+                if first != "" && second != "" {
+                    println!("too many arguments! should only take one");
+                    return;
+                }
+                playlist::list(&first).await;
+            }
+            "add" => {
+                if second == "" {
+                    println!("not enough arguments! usage: playlist add <playlist> <track>");
+                    return;
+                }
+                playlist::add(&first, &second).await;
+            }
+            "remove" => {
+                if second == "" {
+                    println!("not enough arguments! usage: playlist remove <playlist> <track>");
+                    return;
+                }
+                playlist::remove(&first, &second).await;
+            }
+            _ => {
+                println!("invalid command! valid commands are 'list', 'add', and 'remove'");
+            }
+        },
+        Commands::Add { ref track_id } => {
+            library::add(track_id).await;
+        }
+        Commands::Remove { ref track_id } => {
+            library::remove(track_id).await;
         }
     }
 }

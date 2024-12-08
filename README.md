@@ -18,3 +18,19 @@ A Command Line Interface (CLI) for Spotify built using Rust, where users can man
 1. Open up any command line
 2. `cd ~/Downloads/spotify-cli`
 3. `sudo cp target/release/spotify usr/local/bin` -> administrator is required
+
+## todo:
+
+what we have worked on:
+- authenticating users
+- getting current playing track
+- list user's playlists
+- get songs from user's playlist
+- follow and unfollow artists by id
+
+what we want:
+- [x] playlist management: add and remove from playlist
+- [ ] create and delete playlists
+- [ ] follow artists by name
+- [ ] add songs to library by name
+- [ ] figure out a way to search by name and get an id
