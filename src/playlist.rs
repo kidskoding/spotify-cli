@@ -65,3 +65,50 @@ pub async fn list(target_playlist: &str) {
     }
     println!("could not find playlist {}", target_playlist);
 }
+
+pub async fn add(target_playlist: &str, target_song: &str) {
+    let spotify = auth::spotify_from_token();
+    let user = spotify
+        .current_user()
+        .await
+        .expect("unable to get current user!");
+
+    let playlists = spotify.user_playlists(user.id);
+
+    pin_mut!(playlists);
+    let mut playlist_list = Vec::new();
+    while let Some(item) = playlists.try_next().await.unwrap() {
+        playlist_list.push(item);
+    }
+
+    let mut playlist_to_add = None;
+    for playlist in playlist_list {
+        if playlist.name == target_playlist {
+            playlist_to_add = Some(playlist);
+            break;
+        }
+    }
+    if playlist_to_add == None {
+        println!("could not find playlist {}", target_playlist);
+        return;
+    }
+
+    let _ = spotify
+        .playlist_add_items(
+            playlist_to_add.clone().unwrap().id,
+            Some(
+                TrackId::from_id(target_song)
+                    .expect("invalid song id!")
+                    .into(),
+            ),
+            Some(0),
+        )
+        .await
+        .expect("couldn't add item to playlist!");
+
+    println!(
+        "succesfully added {} to {}",
+        target_song,
+        playlist_to_add.unwrap().name
+    );
+}

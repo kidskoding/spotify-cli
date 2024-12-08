@@ -79,11 +79,16 @@ async fn main() {
             "list" => {
                 if first != "" && second != "" {
                     println!("too many arguments! should only take one");
+                    return;
                 }
                 playlist::list(&first).await;
             }
             "add" => {
-                println!("not implemented yet...")
+                if second == "" {
+                    println!("not enough arguments! usage: playlist add <playlist> <track>");
+                    return;
+                }
+                playlist::add(&first, &second).await;
             }
             "remove" => {
                 println!("not implemented yet...")
