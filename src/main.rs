@@ -1,4 +1,6 @@
 use clap::{Parser, Subcommand};
+use rspotify::{model::UserId, ClientCredsSpotify, Credentials};
+use spotify_cli::*;
 
 mod auth;
 mod follow;
@@ -10,9 +12,7 @@ mod volume;
 struct Cli {
     #[command(subcommand)]
     command: Commands,
-
-use rspotify::{Credentials, ClientCredsSpotify, model::UserId};
-use spotify_cli::*;
+}
 
 // pub mod options;
 
@@ -33,8 +33,6 @@ use spotify_cli::*;
 //        println!("{}", playlist.name);
 //   }
 //    let __ = item_list_from_playlist(spotify.clone(), result[1].id.clone()).await;
-
-}
 
 #[derive(Subcommand, Debug)]
 enum Commands {
