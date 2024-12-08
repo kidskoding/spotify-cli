@@ -11,7 +11,9 @@ pub async fn auth() {
     let oauth = OAuth::from_env(scopes!(
         "user-read-playback-state",
         "user-modify-playback-state",
-        "user-follow-modify"
+        "user-follow-modify",
+        "playlist-modify-public",
+        "playlist-modify-private"
     ))
     .unwrap();
 
