@@ -1,8 +1,13 @@
 [package]
-name = "spotify"
+name = "spotify_cli"
 version = "0.1.0"
 edition = "2021"
+default-run = "spotify_cli"
 
 [dependencies]
 spotify = "0.8.2"
 dotenv = "0.15.0"
+rspotify = { version = "0.13.3", features = ["env-file", "cli"]}
+futures-util = "0.3.31"
+futures = "0.3"
+tokio = { version = "1", features = ["full"] }
