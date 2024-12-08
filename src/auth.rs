@@ -10,7 +10,8 @@ pub async fn auth() {
     let creds = Credentials::from_env().unwrap();
     let oauth = OAuth::from_env(scopes!(
         "user-read-playback-state",
-        "user-modify-playback-state"
+        "user-modify-playback-state",
+        "user-follow-modify"
     ))
     .unwrap();
 

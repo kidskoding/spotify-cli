@@ -1,6 +1,7 @@
 use clap::{Parser, Subcommand};
 
 mod auth;
+mod follow;
 mod query;
 mod volume;
 
@@ -24,6 +25,18 @@ enum Commands {
     Volume {
         volume_delta: i8,
     },
+
+    // follow artist from id
+    #[command(arg_required_else_help = true)]
+    Follow {
+        artist_id: Box<str>,
+    },
+
+    // unfollow artist from id
+    #[command(arg_required_else_help = true)]
+    Unfollow {
+        artist_id: Box<str>,
+    },
 }
 
 #[tokio::main]
@@ -38,6 +51,12 @@ async fn main() {
         }
         Commands::Volume { volume_delta } => {
             volume::change_volume(volume_delta).await;
+        }
+        Commands::Follow { ref artist_id } => {
+            follow::follow(artist_id).await;
+        }
+        Commands::Unfollow { ref artist_id } => {
+            follow::unfollow(artist_id).await;
         }
     }
     println!("{:?}", cli);
