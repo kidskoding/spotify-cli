@@ -32,5 +32,12 @@ pub async fn query() {
         .await
         .expect("error connecting to spotify");
 
-    println!("currently playing: {}", playing_track.name)
+    print!("currently playing: {}", playing_track.name + " - ");
+    for i in 0..playing_track.artists.len() {
+        if i > 0 {
+            print!(", ");
+        }
+        print!("{}", playing_track.artists[i].name);
+    }
+    println!();
 }
