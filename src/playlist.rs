@@ -1,8 +1,9 @@
 use futures::stream::TryStreamExt;
 use futures_util::pin_mut;
-use rspotify::model::{Country, Market, PlaylistId, PlaylistItem, SimplifiedPlaylist, UserId};
-use rspotify::prelude::{BaseClient, OAuthClient};
-use spotify_cli::item_list_from_playlist;
+use rspotify::{
+    model::TrackId,
+    prelude::{BaseClient, OAuthClient},
+};
 
 use crate::auth;
 
@@ -35,9 +36,29 @@ pub async fn list(target_playlist: &str) {
             pin_mut!(stream);
             let playlist = stream.await.expect("unable to fetch playlist!");
 
-            println!("here's the tracks in {target_playlist}");
+            let mut playable_items = Vec::new();
             for track in playlist.tracks.items {
-                println!("\t{:?}", track.track.unwrap().id());
+                playable_items.push(track.track.unwrap());
+            }
+
+            let mut track_ids: Vec<TrackId> = Vec::new();
+            for i in 0..playable_items.len() {
+                let track_id = playable_items[i]
+                    .id()
+                    .expect("invalid playable id in playlist!")
+                    .try_into()
+                    .expect("invalid track in playlist!");
+                track_ids.push(track_id);
+            }
+
+            let tracks = spotify
+                .tracks(track_ids, None)
+                .await
+                .expect("couldn't get tracks from spotify!");
+
+            println!("here's the tracks in {target_playlist}");
+            for track in tracks {
+                println!("\t{}", track.name);
             }
             return;
         }
