@@ -5,9 +5,10 @@ edition = "2021"
 default-run = "spotify_cli"
 
 [dependencies]
-spotify = "0.8.2"
+clap = { version = "4.5.20", features = ["derive"] }
+rspotify = { version = "0.13.3", features = ["env-file", "cli"] }
+tokio = { version = "1.40.0", features = ["full"] }
+serde_json = { version = "1.0" 
 dotenv = "0.15.0"
-rspotify = { version = "0.13.3", features = ["env-file", "cli"]}
 futures-util = "0.3.31"
 futures = "0.3"
-tokio = { version = "1", features = ["full"] }
