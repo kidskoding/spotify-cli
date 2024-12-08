@@ -91,7 +91,11 @@ async fn main() {
                 playlist::add(&first, &second).await;
             }
             "remove" => {
-                println!("not implemented yet...")
+                if second == "" {
+                    println!("not enough arguments! usage: playlist remove <playlist> <track>");
+                    return;
+                }
+                playlist::remove(&first, &second).await;
             }
             _ => {
                 println!("invalid command! valid commands are 'list', 'add', and 'remove'");
