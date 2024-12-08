@@ -2,3 +2,5 @@ target
 spotify.1
 .env
 .token
+
+main.backup.rs

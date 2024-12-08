@@ -1,4 +1,4 @@
-use clap::{Parser, Subcommand};
+use clap::{CommandFactory, Parser, Subcommand};
 
 mod auth;
 mod follow;
@@ -7,7 +7,13 @@ mod query;
 mod volume;
 
 #[derive(Parser, Debug)]
-#[command(version, about, long_about = None)]
+#[command(
+    version, 
+    about, 
+    long_about = None,
+    disable_help_flag = true,
+    disable_version_flag = true,
+)]
 struct Cli {
     #[command(subcommand)]
     command: Commands,
@@ -15,47 +21,28 @@ struct Cli {
 
 #[derive(Subcommand, Debug)]
 enum Commands {
-    // authenticates a user
     Auth,
-
-    // query what track is currently playing
     Query,
-
-    // change volume by volume_delta
     #[command(arg_required_else_help = true)]
     Volume {
         volume_delta: i8,
     },
-
-    // follow artist from id
     #[command(arg_required_else_help = true)]
     Follow {
         artist_id: String,
     },
-
-    // unfollow artist from id
     #[command(arg_required_else_help = true)]
     Unfollow {
         artist_id: String,
     },
-
-    // various commands related to controlling playlists
-    Playlist {
-        #[clap(index = 1)]
-        command: String,
-
-        #[clap(default_value = "", index = 2)]
-        first: String,
-
-        #[clap(default_value = "", index = 3)]
-        second: String,
-    },
+    Version,
 }
 
 #[tokio::main]
 async fn main() {
     let cli = Cli::parse();
-    match cli.command {
+
+    match &cli.command {
         Commands::Auth => {
             auth::auth().await;
         }
@@ -63,35 +50,16 @@ async fn main() {
             query::query().await;
         }
         Commands::Volume { volume_delta } => {
-            volume::change_volume(volume_delta).await;
+            volume::change_volume(*volume_delta).await;
         }
-        Commands::Follow { ref artist_id } => {
+        Commands::Follow { artist_id } => {
             follow::follow(artist_id).await;
         }
-        Commands::Unfollow { ref artist_id } => {
+        Commands::Unfollow { artist_id } => {
             follow::unfollow(artist_id).await;
         }
-        Commands::Playlist {
-            ref command,
-            ref first,
-            ref second,
-        } => match command.as_str() {
-            "list" => {
-                if first != "" && second != "" {
-                    println!("too many arguments! should only take one");
-                }
-                playlist::list(&first).await;
-            }
-            "add" => {
-                println!("not implemented yet...")
-            }
-            "remove" => {
-                println!("not implemented yet...")
-            }
-            _ => {
-                println!("invalid command! valid commands are 'list', 'add', and 'remove'");
-            }
-        },
+        Commands::Version => {
+            print!("{}", Cli::command().render_version());
+        }
     }
-    println!("{:?}", cli);
 }
