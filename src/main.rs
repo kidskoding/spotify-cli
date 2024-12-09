@@ -1,4 +1,4 @@
-use clap::{CommandFactory, Parser, Subcommand};
+use clap::{CommandFactory, FromArgMatches, Parser, Subcommand};
 
 mod auth;
 mod follow;
@@ -65,14 +65,23 @@ enum Commands {
 
 #[tokio::main]
 async fn main() {
-    let cli = Cli::parse();
+    let cmd = Cli::command()
+        .after_help(query::query().await);
+
+    let cli = match cmd.try_get_matches() {
+        Ok(matches) => Cli::from_arg_matches(&matches).unwrap(),
+        Err(e) => {
+            e.print().unwrap();
+            std::process::exit(0);
+        }
+    };
 
     match &cli.command {
         Commands::Auth => {
             auth::auth().await;
         }
         Commands::Query => {
-            query::query().await;
+            println!("{}", query::query().await);
         }
         Commands::Volume { volume_delta } => {
             volume::change_volume(*volume_delta).await;

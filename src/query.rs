@@ -3,7 +3,7 @@ use rspotify::{clients::OAuthClient, model::AdditionalType};
 
 use crate::auth;
 
-pub async fn query() {
+pub async fn query() -> String {
     let spotify = auth::spotify_from_token();
 
     let additional_types = [AdditionalType::Track];
@@ -14,8 +14,7 @@ pub async fn query() {
 
     let playable_item = match results {
         None => {
-            println!("no current playing context!");
-            return;
+            return String::from("no current playing context!");
         }
         Some(x) => x.item.unwrap(),
     };
@@ -32,12 +31,13 @@ pub async fn query() {
         .await
         .expect("error connecting to spotify");
 
-    print!("currently playing: {}", playing_track.name + " - ");
+    let mut currently_playing: String = format!("currently playing: {}", playing_track.name + " - ");
     for i in 0..playing_track.artists.len() {
         if i > 0 {
-            print!(", ");
+            currently_playing.push_str(", ");
         }
-        print!("{}", playing_track.artists[i].name);
+        currently_playing.push_str(&playing_track.artists[i].name);
     }
-    println!();
+    
+    currently_playing
 }
