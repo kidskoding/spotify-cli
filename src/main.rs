@@ -6,6 +6,7 @@ mod library;
 mod playlist;
 mod status;
 mod volume;
+mod song;
 
 #[derive(Parser, Debug)]
 #[command(
@@ -91,31 +92,31 @@ async fn main() {
             ref first,
             ref second,
         } => match command.as_str() {
-            "list" => {
-                if first != "" && second != "" {
-                    println!("too many arguments! should only take one");
-                    return;
+                "list" => {
+                    if first != "" && second != "" {
+                        println!("too many arguments! should only take one");
+                        return;
+                    }
+                    playlist::list(&first).await;
                 }
-                playlist::list(&first).await;
-            }
-            "add" => {
-                if second == "" {
-                    println!("not enough arguments! usage: playlist add <playlist> <track>");
-                    return;
+                "add" => {
+                    if second == "" {
+                        println!("not enough arguments! usage: playlist add <playlist> <track>");
+                        return;
+                    }
+                    playlist::add(&first, &second).await;
                 }
-                playlist::add(&first, &second).await;
-            }
-            "remove" => {
-                if second == "" {
-                    println!("not enough arguments! usage: playlist remove <playlist> <track>");
-                    return;
+                "remove" => {
+                    if second == "" {
+                        println!("not enough arguments! usage: playlist remove <playlist> <track>");
+                        return;
+                    }
+                    playlist::remove(&first, &second).await;
                 }
-                playlist::remove(&first, &second).await;
-            }
-            _ => {
-                println!("invalid command! valid commands are 'list', 'add', and 'remove'");
-            }
-        },
+                _ => {
+                    println!("invalid command! valid commands are 'list', 'add', and 'remove'");
+                }
+            },
         Commands::Add { ref track_id } => {
             library::add(track_id).await;
         }
