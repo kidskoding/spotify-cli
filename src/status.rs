@@ -5,6 +5,13 @@ use rspotify::{clients::OAuthClient, model::AdditionalType};
 use crate::auth;
 
 pub async fn status() -> String {
+    let currently_playing = get_current_song().await;
+    let next_in_queue = get_next_song().await;
+
+    currently_playing + &next_in_queue
+}
+
+async fn get_current_song() -> String {
     let spotify = auth::spotify_from_token();
 
     let additional_types = [AdditionalType::Track];
@@ -42,13 +49,18 @@ pub async fn status() -> String {
     }
 
     currently_playing.push_str("\n");
+    currently_playing
+}
+
+async fn get_next_song() -> String {
+    let spotify = auth::spotify_from_token();
 
     let queue = spotify
         .current_user_queue()
         .await
         .expect("error fetching your queue");
 
-    let next_in_queue: String = if let Some(next_track) = queue.queue.get(0) {
+    if let Some(next_track) = queue.queue.get(0) {
         let next_track_name = match next_track {
             PlayableItem::Track(track) => &track.name,
             PlayableItem::Episode(episode) => &episode.name,
@@ -56,7 +68,7 @@ pub async fn status() -> String {
         let mut next_in_queue = format!("next in queue: {} - ", next_track_name);
         match next_track {
             PlayableItem::Track(track) => {
-                for(i, artist) in track.artists.iter().enumerate() {
+                for (i, artist) in track.artists.iter().enumerate() {
                     if i > 0 {
                         next_in_queue.push_str(", ");
                     }
@@ -70,7 +82,5 @@ pub async fn status() -> String {
         next_in_queue
     } else {
         String::from("next in queue: none")
-    };
-    
-    return currently_playing + &next_in_queue;
+    }
 }
