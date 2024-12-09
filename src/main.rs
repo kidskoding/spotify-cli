@@ -1,10 +1,10 @@
-use clap::{CommandFactory, FromArgMatches, Parser, Subcommand};
+use clap::{CommandFactory, Parser, Subcommand};
 
 mod auth;
 mod follow;
 mod library;
 mod playlist;
-mod query;
+mod status;
 mod volume;
 
 #[derive(Parser, Debug)]
@@ -23,7 +23,7 @@ struct Cli {
 #[derive(Subcommand, Debug)]
 enum Commands {
     Auth,
-    Query,
+    Status,
     #[command(arg_required_else_help = true)]
     Volume {
         volume_delta: i8,
@@ -65,23 +65,14 @@ enum Commands {
 
 #[tokio::main]
 async fn main() {
-    let cmd = Cli::command()
-        .after_help(query::query().await);
-
-    let cli = match cmd.try_get_matches() {
-        Ok(matches) => Cli::from_arg_matches(&matches).unwrap(),
-        Err(e) => {
-            e.print().unwrap();
-            std::process::exit(0);
-        }
-    };
+    let cli = Cli::parse();
 
     match &cli.command {
         Commands::Auth => {
             auth::auth().await;
         }
-        Commands::Query => {
-            println!("{}", query::query().await);
+        Commands::Status => {
+            println!("{}", status::status().await);
         }
         Commands::Volume { volume_delta } => {
             volume::change_volume(*volume_delta).await;
