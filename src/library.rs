@@ -7,7 +7,7 @@ pub async fn add(track_id: &str) {
     let spotify = auth::spotify_from_token();
 
     let mut tracks = Vec::new();
-    tracks.push(TrackId::from_id(track_id).expect("invalid track id!"));
+    tracks.push(TrackId::from_id_or_uri(track_id).expect("invalid track id!"));
     let _ = spotify
         .current_user_saved_tracks_add(tracks)
         .await
@@ -20,7 +20,7 @@ pub async fn remove(track_id: &str) {
     let spotify = auth::spotify_from_token();
 
     let mut tracks = Vec::new();
-    tracks.push(TrackId::from_id(track_id).expect("invalid track id!"));
+    tracks.push(TrackId::from_id_or_uri(track_id).expect("invalid track id!"));
     let _ = spotify
         .current_user_saved_tracks_delete(tracks)
         .await
