@@ -4,3 +4,4 @@ spotify.1
 .token
 
 main.backup.rs
+*.tar.gz
