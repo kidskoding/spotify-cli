@@ -98,14 +98,14 @@ async fn main() {
             ref second,
         } => match command.as_str() {
             "list" => {
-                if first != "" && second != "" {
-                    println!("too many arguments! should only take one");
+                if second != "" {
+                    println!("too many arguments! playlist list Option(<playlist_name>)");
                     return;
                 }
                 playlist::list(&first).await;
             }
             "add" => {
-                if second == "" {
+                if first == "" || second == "" {
                     println!("not enough arguments! usage: playlist add <playlist> <track>");
                     return;
                 }
@@ -113,15 +113,29 @@ async fn main() {
                 playlist::add(&first, &track_id).await;
             }
             "remove" => {
-                if second == "" {
+                if first == "" || second == "" {
                     println!("not enough arguments! usage: playlist remove <playlist> <track>");
                     return;
                 }
                 let track_id = search::search(second, SearchType::Track).await;
                 playlist::remove(&first, &track_id).await;
             }
+            "create" => {
+                if first == "" {
+                    println!("not enough arguments! usage: playlist create <playlist>");
+                    return;
+                }
+                playlist::create(&first).await;
+            }
+            "delete" => {
+                if first == "" {
+                    println!("not enough arguments! usage: playlist delete <playlist>");
+                    return;
+                }
+                playlist::delete(&first).await;
+            }
             _ => {
-                println!("invalid command! valid commands are 'list', 'add', and 'remove'");
+                println!("invalid command! valid commands are 'list', 'add', 'remove', 'create', and 'delete'");
             }
         },
         Commands::Add { ref track } => {

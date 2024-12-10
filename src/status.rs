@@ -15,10 +15,12 @@ pub async fn status() -> String {
         Err(err) => return err,
     };
 
-    let status = String::from("currently playing: ") + &currently_playing.to_string() 
-        + "\n" 
-        + "next in queue: " + &next_in_queue.to_string();
-    
+    let status = String::from("currently playing: ")
+        + &currently_playing.to_string()
+        + "\n"
+        + "next in queue: "
+        + &next_in_queue.to_string();
+
     status
 }
 
@@ -85,10 +87,10 @@ async fn get_next_song() -> Result<Song, String> {
             let name = track.name;
             let artists = track.artists;
             let album = track.album;
-            
+
             Song::new(name, artists, album)
         }
-        PlayableItem::Episode(episode) => {
+        PlayableItem::Episode(_) => {
             return Err(String::from("next in queue: none"));
         }
     };

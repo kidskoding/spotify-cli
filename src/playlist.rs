@@ -9,12 +9,7 @@ use crate::auth;
 
 async fn get_target_playlist(target_playlist: &str) -> Option<SimplifiedPlaylist> {
     let spotify = auth::spotify_from_token();
-    let user = spotify
-        .current_user()
-        .await
-        .expect("unable to get current user!");
-
-    let playlists = spotify.user_playlists(user.id);
+    let playlists = spotify.current_user_playlists();
 
     pin_mut!(playlists);
     let mut playlist_list = Vec::new();
@@ -156,4 +151,41 @@ pub async fn remove(target_playlist: &str, target_song: &str) {
         "successfully removed {} from {}",
         target_song, playlist.name
     );
+}
+
+pub async fn create(playlist_name: &str) {
+    let spotify = auth::spotify_from_token();
+    let user = spotify
+        .current_user()
+        .await
+        .expect("unable to get current user!");
+
+    let _ = spotify
+        .user_playlist_create(user.id, playlist_name, Some(true), None, None)
+        .await
+        .expect("could not create playlist!");
+
+    println!("successfully created playlist {}", playlist_name);
+}
+
+pub async fn delete(playlist_name: &str) {
+    let playlist_result = get_target_playlist(playlist_name).await;
+    let playlist;
+    match playlist_result {
+        None => {
+            println!("could not find playlist {}", playlist_name);
+            return;
+        }
+        Some(x) => {
+            playlist = x;
+        }
+    }
+
+    let spotify = auth::spotify_from_token();
+    let _ = spotify
+        .playlist_unfollow(playlist.id)
+        .await
+        .expect("couldn't delete playlist!");
+
+    println!("successfully deleted playlist {}", playlist_name);
 }
