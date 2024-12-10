@@ -8,41 +8,6 @@ A Command Line Interface (CLI) for Spotify built using Rust, where users can man
 
 install Arch lmfao 😹
 
-### Mac
-
-Mac users can use Homebrew.
-
-1. Install Homebrew [here](https://brew.sh/)
-2. Install `spotify-cli` by running:
-
-   ```sh
-   brew tap kidskoding/spotify-cli https://github.com/kidskoding/spotify-cli
-   brew install spotify-cli
-   ```
-
-### Linux
-
-Linux users can use their native package manager.
-
-1. Debian based distributions (Debian, Ubuntu, Linux Mint, etc.) run:
-
-   ```sh
-   sudo apt update
-   sudo apt install spotify-cli
-   ```
-
-2. For Red Hat based distributions (RHEL, Fedora, CentOS, etc.), run:
-
-   ```sh
-   sudo dnf install spotify-cli
-   ```
-
-3. For Arch based distribution (Arch, Manjaro) run:
-
-   ```sh
-   sudo pacman -S spotify-cli
-   ```
-
 ### Source
 
 Those who wish to build the `spotify-cli` tool from source can follow the instructions below:
@@ -51,7 +16,7 @@ Those who wish to build the `spotify-cli` tool from source can follow the instru
 2. Extract the tarball:
 
    ```sh
-   wget https://github.com/kidskoding/spotify-cli/spotify-cli.tar.gz
+   wget wget https://github.com/kidskoding/spotify-cli/releases/download/v0.1.1-alpha/spotify-cli-0.1.1-alpha.tar.gz
    tar -xvzf spotify-cli.tar.gz
    ```
 
