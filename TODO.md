@@ -17,4 +17,3 @@
 - [ ] Create and delete playlists
 - [x] Figure out how to put the .token in a ~/.config
 - [ ] Package the CLI tool with tarball, Homebrew, apt, etc.
-
