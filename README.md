@@ -1,38 +1,84 @@
 # spotify-cli
 
-A Command Line Interface (CLI) for Spotify built using Rust, where users can manage their Spotify songs and playlists through the Command Line
+A Command Line Interface (CLI) for Spotify built using Rust, where users can manage their Spotify songs and playlists through the Command Line.
 
-## Enable command globally
+## Downloading and Installing the `spotify-cli` tool
 
-### Windows
+### Mac
 
-1. Open Command Prompt as an Administrator
-2. `cd ~/Downloads/spotify-cli`
-3. `mkdir "C:\Program Files\spotify"`
-4. `copy target\release\spotify.exe "C:\Program Files\spotify\"`
-5. Add to System Environment PATH Variables
-   - Go to system variables and edit PATH and add the path `C:\Program Files\spotify\`
+Mac users can use Homebrew.
 
-### UNIX Systems (Mac and Linux)
+1. Install Homebrew [here](https://brew.sh/)
+2. Install `spotify-cli` by running:
 
-1. Open up any command line
-2. `cd ~/Downloads/spotify-cli`
-3. `sudo cp target/release/spotify usr/local/bin` -> administrator is required
+   ```sh
+   brew install spotify-cli
+   ```
 
-## todo:
+### Linux
 
-what we have worked on:
-- authenticating users
-- getting current playing track
-- list user's playlists
-- get songs from user's playlist
-- follow and unfollow artists by id
+Linux users can use their native package manager.
 
-what we want:
-- [x] playlist management: add and remove from playlist
-- [x] follow artists by name
-- [x] add songs to library by name
-- [x] figure out a way to search by name and get an id
-- [ ] create and delete playlists
-- [ ] figure out how to put the .token in a ~/.config
-- [ ] package the CLI tool with tarball, homebrew, apt, etc.
+1. Debian based distributions (Debian, Ubuntu, Linux Mint, etc.) run:
+
+   ```sh
+   sudo apt update
+   sudo apt install spotify-cli
+   ```
+
+2. For Red Hat based distributions (RHEL, Fedora, CentOS, etc.), run:
+
+   ```sh
+   sudo dnf install spotify-cli
+   ```
+
+3. For Arch based distribution (Arch, Manjaro) run:
+
+   ```sh
+   sudo pacman -S spotify-cli
+   ```
+
+### Source
+
+Additionally, users can install the `spotify-cli` tool from source.
+
+1. Install Rust [here](https://www.rust-lang.org/learn/get-started)
+2. Extract the tarball:
+
+   ```sh
+   wget https://github.com/kidskoding/spotify-cli/spotify-cli.tar.gz
+   
+   tar -xvzf spotify-cli.tar.gz
+   ```
+
+3. Build and run the CLI tool:
+
+   ```sh
+   cd spotify-cli/
+   
+   cargo install --path .
+   ```
+
+## todo
+
+### What we have worked on
+
+- Authenticating users
+- Getting current playing track
+- Listing user's playlists
+- Getting songs from user's playlist
+- Following and unfollowing artists by ID
+
+### What we want
+
+- [x] Playlist management: add and remove from playlist
+- [x] Follow artists by name
+- [x] Add songs to library by name
+- [x] Figure out a way to search by name and get an ID
+- [ ] Create and delete playlists
+- [x] Figure out how to put the .token in a ~/.config
+- [ ] Package the CLI tool with tarball, Homebrew, apt, etc.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
