@@ -1,6 +1,5 @@
 use rspotify::clients::OAuthClient;
 use rspotify::model::TrackId;
-use rspotify::prelude::BaseClient;
 
 use crate::auth;
 use crate::song::Song;
