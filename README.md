@@ -1,22 +1,35 @@
 # spotify-cli
 
-A Command Line Interface (CLI) tool for Spotify built using Rust
+A Command Line Interface (CLI) tool for Spotify, built using Rust
 
 ## Downloading and Installing the `spotify-cli` tool
 
-### Windows
+### macOS
 
-install Arch lmfao 😹
+For macOS users, the `spotify-cli` tool can be easily installed using [Homebrew](https://brew.sh/)
+
+1. Install homebrew [here](https://brew.sh/)
+2. Add the tap
+
+   ```sh
+   brew tap kidskoding/spotify-cli
+   ```
+
+3. Install the `spotify-cli` tool
+
+   ```sh
+   brew install spotify-cli
+   ```
 
 ### Source
 
-Those who wish to build the `spotify-cli` tool from source can follow the instructions below:
+Those who wish to build the `spotify-cli` tool from source can follow the instructions below
 
 1. Since this CLI tool was built in Rust, you will need to install Rust [here](https://www.rust-lang.org/learn/get-started)
 2. Extract the tarball:
 
    ```sh
-   wget https://github.com/kidskoding/spotify-cli/archive/refs/tags/v0.1.2-alpha.tar.gz
+   wget https://github.com/kidskoding/spotify-cli/releases/download/v0.1.3-alpha/spotify-cli.tar.gz
    tar -xvzf spotify-cli.tar.gz
    ```
 
@@ -32,7 +45,7 @@ Those who wish to build the `spotify-cli` tool from source can follow the instru
 1. Download and Extract the standalone binary:
 
    ```sh
-   wget https://github.com/kidskoding/spotify-cli/releases/download/v0.1.2-alpha/spotify-cli.tar
+   wget https://github.com/kidskoding/spotify-cli/releases/download/v0.1.3-alpha/spotify-cli.tar
    tar -xvf spotify-cli.tar
    ```
 
