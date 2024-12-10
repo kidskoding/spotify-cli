@@ -1,6 +1,6 @@
 [package]
 name = "spotify-cli"
-version = "0.1.0-alpha"
+version = "0.1.1-alpha"
 edition = "2021"
 default-run = "spotify"
 
