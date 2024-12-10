@@ -16,6 +16,7 @@ Mac users can use Homebrew.
 2. Install `spotify-cli` by running:
 
    ```sh
+   brew tap kidskoding/spotify-cli https://github.com/kidskoding/spotify-cli
    brew install spotify-cli
    ```
 
@@ -44,14 +45,13 @@ Linux users can use their native package manager.
 
 ### Source
 
-Additionally, users can install the `spotify-cli` tool from source.
+Those who wish to build the `spotify-cli` tool from source can follow the instructions below:
 
 1. Install Rust [here](https://www.rust-lang.org/learn/get-started)
 2. Extract the tarball:
 
    ```sh
    wget https://github.com/kidskoding/spotify-cli/spotify-cli.tar.gz
-   
    tar -xvzf spotify-cli.tar.gz
    ```
 
@@ -59,7 +59,6 @@ Additionally, users can install the `spotify-cli` tool from source.
 
    ```sh
    cd spotify-cli/
-   
    cargo install --path .
    ```
 
