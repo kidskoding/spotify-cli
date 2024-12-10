@@ -113,7 +113,7 @@ pub async fn add(target_playlist: &str, target_song: &str) {
         .playlist_add_items(
             playlist.clone().id,
             Some(
-                TrackId::from_id(target_song)
+                TrackId::from_id_or_uri(target_song)
                     .expect("invalid song id!")
                     .into(),
             ),
@@ -143,7 +143,7 @@ pub async fn remove(target_playlist: &str, target_song: &str) {
         .playlist_remove_all_occurrences_of_items(
             playlist.id,
             Some(
-                TrackId::from_id(target_song)
+                TrackId::from_id_or_uri(target_song)
                     .expect("invalid song id!")
                     .into(),
             ),
