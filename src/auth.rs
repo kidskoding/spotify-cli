@@ -8,12 +8,28 @@ use std::sync::Arc;
 
 pub async fn auth() {
     let creds = Credentials::from_env().unwrap();
-    let oauth = OAuth::from_env(scopes!(
-        "user-read-playback-state",
-        "user-modify-playback-state",
-        "user-follow-modify"
-    ))
-    .unwrap();
+    // let creds = Credentials::new("9dcd16ca7aa440dbd287cb41288888f", "912383c81e8e444e83b2963d48fdfb2f");
+    // let oauth = OAuth::from_env(scopes!(
+    //     "user-read-playback-state",
+    //     "user-modify-playback-state",
+    //     "user-follow-modify"
+            // "playlist-modify-private",
+            // "playlist-modify-public"
+    // ))
+    // .unwrap();
+    let oauth = OAuth {
+        redirect_uri: "http://localhost:8000/callback".to_string(),
+        scopes: scopes!(
+            "user-read-playback-state",
+            "user-modify-playback-state",
+            "user-follow-modify",
+            "playlist-modify-private",
+            "playlist-modify-public",
+            "playlist-read-private",
+            "playlist-read-collaborative"
+        ),
+        ..Default::default()
+    };
 
     let write_token_to_file = |token: Token| {
         let serialized = serde_json::to_string(&token).unwrap();
