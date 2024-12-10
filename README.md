@@ -1,6 +1,6 @@
 # spotify-cli
 
-A Command Line Interface (CLI) for Spotify built using Rust, where users can manage their Spotify songs and playlists through the Command Line.
+A Command Line Interface (CLI) tool for Spotify built using Rust
 
 ## Downloading and Installing the `spotify-cli` tool
 
@@ -12,11 +12,11 @@ install Arch lmfao 😹
 
 Those who wish to build the `spotify-cli` tool from source can follow the instructions below:
 
-1. Install Rust [here](https://www.rust-lang.org/learn/get-started)
+1. Since this CLI tool was built in Rust, you will need to install Rust [here](https://www.rust-lang.org/learn/get-started)
 2. Extract the tarball:
 
    ```sh
-   wget https://github.com/kidskoding/spotify-cli/releases/tag/v0.1.1-alpha/spotify-cli-0.1.1-alpha.tar.gz
+   wget https://github.com/kidskoding/spotify-cli/archive/refs/tags/v0.1.2-alpha.tar.gz
    tar -xvzf spotify-cli.tar.gz
    ```
 
@@ -27,25 +27,20 @@ Those who wish to build the `spotify-cli` tool from source can follow the instru
    cargo install --path .
    ```
 
-## todo
+### Standalone Binary for other UNIX systems
 
-### What we have worked on
+1. Download and Extract the standalone binary:
 
-- Authenticating users
-- Getting current playing track
-- Listing user's playlists
-- Getting songs from user's playlist
-- Following and unfollowing artists by ID
+   ```sh
+   wget https://github.com/kidskoding/spotify-cli/releases/download/v0.1.2-alpha/spotify-cli.tar
+   tar -xvf spotify-cli.tar
+   ```
+   
+2. Move the executable to an executable binary path
 
-### What we want
-
-- [x] Playlist management: add and remove from playlist
-- [x] Follow artists by name
-- [x] Add songs to library by name
-- [x] Figure out a way to search by name and get an ID
-- [ ] Create and delete playlists
-- [x] Figure out how to put the .token in a ~/.config
-- [ ] Package the CLI tool with tarball, Homebrew, apt, etc.
+  ```sh
+  sudo mv ./spotify /usr/local/bin/spotify
+  ```
 
 ## License
 
