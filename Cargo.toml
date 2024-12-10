@@ -1,8 +1,12 @@
 [package]
-name = "spotify_cli"
-version = "0.1.0"
+name = "spotify-cli"
+version = "0.1.1-alpha"
 edition = "2021"
-default-run = "spotify_cli"
+default-run = "spotify"
+
+[[bin]]
+name = "spotify"
+path = "src/main.rs"
 
 [dependencies]
 clap = { version = "4.5.20", features = ["derive"] }
@@ -12,3 +16,4 @@ serde_json = { version = "1.0" }
 dotenv = "0.15.0"
 futures-util = "0.3.31"
 futures = "0.3"
+dirs = "5.0.1"

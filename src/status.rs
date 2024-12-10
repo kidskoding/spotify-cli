@@ -3,15 +3,26 @@ use rspotify::prelude::BaseClient;
 use rspotify::{clients::OAuthClient, model::AdditionalType};
 
 use crate::auth;
+use crate::song::Song;
 
 pub async fn status() -> String {
-    let currently_playing = get_current_song().await;
-    let next_in_queue = get_next_song().await;
+    let currently_playing = match get_current_song().await {
+        Ok(song) => song,
+        Err(err) => return err,
+    };
+    let next_in_queue = match get_next_song().await {
+        Ok(song) => song,
+        Err(err) => return err,
+    };
 
-    currently_playing + &next_in_queue
+    let status = String::from("currently playing: ") + &currently_playing.to_string() 
+        + "\n" 
+        + "next in queue: " + &next_in_queue.to_string();
+    
+    status
 }
 
-async fn get_current_song() -> String {
+async fn get_current_song() -> Result<Song, String> {
     let spotify = auth::spotify_from_token();
 
     let additional_types = [AdditionalType::Track];
@@ -22,12 +33,12 @@ async fn get_current_song() -> String {
 
     let playable_item = match results {
         None => {
-            return String::from("no current playing context!");
+            return Err(String::from("no current playing context!"));
         }
         Some(x) => x.item.unwrap(),
     };
 
-    let playing_track = spotify
+    let current_song = spotify
         .track(
             playable_item
                 .id()
@@ -39,20 +50,16 @@ async fn get_current_song() -> String {
         .await
         .expect("error connecting to spotify");
 
-    let mut currently_playing: String = format!("currently playing: {}", playing_track.name + " - ");
+    let name = current_song.name;
+    let artists = current_song.artists;
+    let album = current_song.album;
 
-    for i in 0..playing_track.artists.len() {
-        if i > 0 {
-            currently_playing.push_str(", ");
-        }
-        currently_playing.push_str(&playing_track.artists[i].name);
-    }
+    let song = Song::new(name, artists, album);
 
-    currently_playing.push_str("\n");
-    currently_playing
+    Ok(song)
 }
 
-async fn get_next_song() -> String {
+async fn get_next_song() -> Result<Song, String> {
     let spotify = auth::spotify_from_token();
 
     let queue = spotify
@@ -60,27 +67,31 @@ async fn get_next_song() -> String {
         .await
         .expect("error fetching your queue");
 
-    if let Some(next_track) = queue.queue.get(0) {
-        let next_track_name = match next_track {
-            PlayableItem::Track(track) => &track.name,
-            PlayableItem::Episode(episode) => &episode.name,
-        };
-        let mut next_in_queue = format!("next in queue: {} - ", next_track_name);
-        match next_track {
-            PlayableItem::Track(track) => {
-                for (i, artist) in track.artists.iter().enumerate() {
-                    if i > 0 {
-                        next_in_queue.push_str(", ");
-                    }
-                    next_in_queue.push_str(&artist.name);
-                }
-            }
-            PlayableItem::Episode(episode) => {
-                // Handle episode case if needed
-            }
+    let next_track = match queue.queue.get(0) {
+        Some(track) => track,
+        None => return Err(String::from("next in queue: none")),
+    };
+
+    let next_song = match next_track {
+        PlayableItem::Track(track) => {
+            let track = spotify
+                .track(
+                    track.id.clone().unwrap().try_into().expect("invalid track"),
+                    None,
+                )
+                .await
+                .expect("error connecting to spotify");
+
+            let name = track.name;
+            let artists = track.artists;
+            let album = track.album;
+            
+            Song::new(name, artists, album)
         }
-        next_in_queue
-    } else {
-        String::from("next in queue: none")
-    }
+        PlayableItem::Episode(episode) => {
+            return Err(String::from("next in queue: none"));
+        }
+    };
+
+    Ok(next_song)
 }

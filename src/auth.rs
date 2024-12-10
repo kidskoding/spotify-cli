@@ -1,10 +1,9 @@
+use std::fs::{self, File};
+use std::io::{Read, Write};
+use std::sync::Arc;
 use rspotify::{
     clients::OAuthClient, scopes, AuthCodeSpotify, Config, Credentials, OAuth, Token, TokenCallback,
 };
-
-use std::fs::File;
-use std::io::{Read, Write};
-use std::sync::Arc;
 
 pub async fn auth() {
     let creds = Credentials::from_env().unwrap();
@@ -19,10 +18,14 @@ pub async fn auth() {
     .unwrap();
 
     let write_token_to_file = |token: Token| {
+        let config_path = dirs::home_dir().expect("Unable to find home directory").join(".config/spotify-cli");
+        fs::create_dir_all(&config_path).expect("Unable to create config directory");
+        let token_path = config_path.join(".token");
+        let mut file = File::create(&token_path).unwrap();
+
         let serialized = serde_json::to_string(&token).unwrap();
-        let mut file = File::create(".token").unwrap();
         let _ = file.write_all(serialized.to_string().as_bytes());
-        println!(">>> Succesfully wrote token to file!");
+        println!(">>> Succesfully wrote token to file in {}!", token_path.display());
         Ok(())
     };
     let token_callback = TokenCallback(Box::new(write_token_to_file));
@@ -47,9 +50,14 @@ pub async fn auth() {
 }
 
 pub fn spotify_from_token() -> AuthCodeSpotify {
-    let mut file = File::open(".token").expect("couldn't find .token file, maybe try auth first?");
+    let config_path = dirs::home_dir().expect("Unable to find home directory").join(".config/spotify-cli");
+    let token_path = config_path.join(".token");
+    let mut file = File::open(&token_path).expect(
+        &format!("couldn't find .token file in {}, maybe try running 'spotify auth' first?", config_path.display())
+    );
     let mut contents = String::new();
     let _ = file.read_to_string(&mut contents);
     let token = serde_json::from_str(&contents).unwrap();
+
     AuthCodeSpotify::from_token(token)
 }

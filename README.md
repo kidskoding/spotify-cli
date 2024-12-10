@@ -1,36 +1,52 @@
 # spotify-cli
 
-A Command Line Interface (CLI) for Spotify built using Rust, where users can manage their Spotify songs and playlists through the Command Line
+A Command Line Interface (CLI) for Spotify built using Rust, where users can manage their Spotify songs and playlists through the Command Line.
 
-## Enable command globally
+## Downloading and Installing the `spotify-cli` tool
 
 ### Windows
 
-1. Open Command Prompt as an Administrator
-2. `cd ~/Downloads/spotify-cli`
-3. `mkdir "C:\Program Files\spotify"`
-4. `copy target\release\spotify.exe "C:\Program Files\spotify\"`
-5. Add to System Environment PATH Variables
-   - Go to system variables and edit PATH and add the path `C:\Program Files\spotify\`
+install Arch lmfao 😹
 
-### UNIX Systems (Mac and Linux)
+### Source
 
-1. Open up any command line
-2. `cd ~/Downloads/spotify-cli`
-3. `sudo cp target/release/spotify usr/local/bin` -> administrator is required
+Those who wish to build the `spotify-cli` tool from source can follow the instructions below:
 
-## todo:
+1. Install Rust [here](https://www.rust-lang.org/learn/get-started)
+2. Extract the tarball:
 
-what we have worked on:
-- authenticating users
-- getting current playing track
-- list user's playlists
-- get songs from user's playlist
-- follow and unfollow artists by id
+   ```sh
+   wget https://github.com/kidskoding/spotify-cli/releases/tag/v0.1.1-alpha/spotify-cli-0.1.1-alpha.tar.gz
+   tar -xvzf spotify-cli.tar.gz
+   ```
 
-what we want:
-- [x] playlist management: add and remove from playlist
-- [ ] create and delete playlists
-- [ ] follow artists by name
-- [ ] add songs to library by name
-- [ ] figure out a way to search by name and get an id
+3. Build and run the CLI tool:
+
+   ```sh
+   cd spotify-cli-0.1.1-alpha/
+   cargo install --path .
+   ```
+
+## todo
+
+### What we have worked on
+
+- Authenticating users
+- Getting current playing track
+- Listing user's playlists
+- Getting songs from user's playlist
+- Following and unfollowing artists by ID
+
+### What we want
+
+- [x] Playlist management: add and remove from playlist
+- [x] Follow artists by name
+- [x] Add songs to library by name
+- [x] Figure out a way to search by name and get an ID
+- [ ] Create and delete playlists
+- [x] Figure out how to put the .token in a ~/.config
+- [ ] Package the CLI tool with tarball, Homebrew, apt, etc.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details

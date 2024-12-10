@@ -7,7 +7,9 @@ mod library;
 mod playlist;
 mod status;
 mod volume;
+mod song;
 mod search;
+mod helper;
 
 #[derive(Parser, Debug)]
 #[command(
@@ -124,12 +126,15 @@ async fn main() {
         },
         Commands::Add { ref track } => {
             let track_id = search::search(track, SearchType::Track).await;
-            println!("here's the track id we got for {}: {}", track, track_id);
-            library::add(&track_id).await;
+            let track_parsed = helper::parse_track_id(&track_id).await;
+            println!("here's the song we got for {}: {}", track, track_parsed.to_string());
+            library::add((&track_id, track_parsed)).await;
         }
         Commands::Remove { ref track } => {
             let track_id = search::search(track, SearchType::Track).await;
-            library::remove(&track_id).await;
+            let track_parsed = helper::parse_track_id(&track_id).await;
+            println!("here's the song we got for {}: {}", track, track_parsed.to_string());
+            library::remove((&track_id, track_parsed)).await;
         }
     }
 }
