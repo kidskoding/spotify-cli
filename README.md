@@ -4,6 +4,10 @@ A Command Line Interface (CLI) for Spotify built using Rust, where users can man
 
 ## Downloading and Installing the `spotify-cli` tool
 
+### Windows
+
+install Arch lmfao 😹
+
 ### Mac
 
 Mac users can use Homebrew.
