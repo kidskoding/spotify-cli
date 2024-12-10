@@ -30,7 +30,9 @@ what we have worked on:
 
 what we want:
 - [x] playlist management: add and remove from playlist
+- [x] follow artists by name
+- [x] add songs to library by name
+- [x] figure out a way to search by name and get an id
 - [ ] create and delete playlists
-- [ ] follow artists by name
-- [ ] add songs to library by name
-- [ ] figure out a way to search by name and get an id
+- [ ] figure out how to put the .token in a ~/.config
+- [ ] package the CLI tool with tarball, homebrew, apt, etc.
