@@ -15,16 +15,6 @@ impl Song {
         }
     }
 
-    //pub fn get_name(&self) -> &String {
-    //    &self.name
-    //}
-    //pub fn get_artists(&self) -> &Vec<SimplifiedArtist> {
-    //    &self.artists
-    //}
-    //pub fn get_album(&self) -> &SimplifiedAlbum {
-    //    &self.album
-    //}
-
     pub fn to_string(&self) -> String {
         let mut result: String = String::new();
 

@@ -35,12 +35,12 @@ Those who wish to build the `spotify-cli` tool from source can follow the instru
    wget https://github.com/kidskoding/spotify-cli/releases/download/v0.1.2-alpha/spotify-cli.tar
    tar -xvf spotify-cli.tar
    ```
-   
+
 2. Move the executable to an executable binary path
 
-  ```sh
-  sudo mv ./spotify /usr/local/bin/spotify
-  ```
+   ```sh
+   sudo mv ./spotify /usr/local/bin/spotify
+   ```
 
 ## License
 
