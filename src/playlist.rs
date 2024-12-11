@@ -193,7 +193,6 @@ pub async fn delete(playlist_name: &str) {
 pub async fn rename(old_name: &str, new_name: &str) {
     let playlist_result = get_target_playlist(old_name).await;
     let playlist;
-    let spotify = auth::spotify_from_token();
     match playlist_result {
         None => {
             println!("could not find playlist {}", old_name);
@@ -204,6 +203,7 @@ pub async fn rename(old_name: &str, new_name: &str) {
         }
     }
 
+    let spotify = auth::spotify_from_token();
     spotify
         .playlist_change_detail(playlist.id, Some(new_name), None, None, None)
         .await
@@ -214,4 +214,24 @@ pub async fn rename(old_name: &str, new_name: &str) {
         playlist.name, new_name
     );
     println!("this might take a while for your changes to be reflected");
+}
+
+pub async fn update_description(playlist_name: &str, desc: &str) {
+    let playlist_result = get_target_playlist(playlist_name).await;
+    let playlist;
+    match playlist_result {
+        None => {
+            println!("could not find playlist {}", playlist_name);
+            return;
+        }
+        Some(x) => {
+            playlist = x;
+        }
+    }
+
+    let spotify = auth::spotify_from_token();
+    spotify
+        .playlist_change_detail(playlist.id, None, None, Some(desc), None)
+        .await
+        .expect("Cannot change name of playlist!");
 }

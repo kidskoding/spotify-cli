@@ -135,14 +135,21 @@ async fn main() {
                 playlist::delete(&first).await;
             }
             "rename" => {
-                if first == "" {
+                if first == "" || second == "" {
                     println!("not enough arguments! usage: playlist rename <old_name> <new_name>");
                     return;
                 }
                 playlist::rename(&first, &second).await;
             }
+            "update" => {
+                if first == "" || second == "" {
+                    println!("not enough arguments! usage: playlist update <playlist> <description>");
+                    return;
+                }
+                playlist::update_description(&first, &second).await;
+            }
             _ => {
-                println!("invalid command! valid commands are 'list', 'add', 'remove', 'create', 'delete', and 'rename'");
+                println!("invalid command! valid commands are 'list', 'add', 'remove', 'create', 'delete', 'rename', and 'update'");
             }
         },
         Commands::Add { ref track } => {
