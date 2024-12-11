@@ -1,22 +1,35 @@
 # spotify-cli
 
-A Command Line Interface (CLI) for Spotify built using Rust, where users can manage their Spotify songs and playlists through the Command Line.
+A Command Line Interface (CLI) tool for Spotify, built using Rust
 
 ## Downloading and Installing the `spotify-cli` tool
 
-### Windows
+### macOS
 
-install Arch lmfao 😹
+For macOS users, the `spotify-cli` tool can be easily installed using [Homebrew](https://brew.sh/)
+
+1. Install homebrew [here](https://brew.sh/)
+2. Add the tap
+
+   ```sh
+   brew tap kidskoding/spotify-cli
+   ```
+
+3. Install the `spotify-cli` tool
+
+   ```sh
+   brew install spotify-cli
+   ```
 
 ### Source
 
-Those who wish to build the `spotify-cli` tool from source can follow the instructions below:
+Those who wish to build the `spotify-cli` tool from source can follow the instructions below
 
-1. Install Rust [here](https://www.rust-lang.org/learn/get-started)
+1. Since this CLI tool was built in Rust, you will need to install Rust [here](https://www.rust-lang.org/learn/get-started)
 2. Extract the tarball:
 
    ```sh
-   wget https://github.com/kidskoding/spotify-cli/releases/tag/v0.1.1-alpha/spotify-cli-0.1.1-alpha.tar.gz
+   wget https://github.com/kidskoding/spotify-cli/releases/download/v0.1.3-alpha/spotify-cli.tar.gz
    tar -xvzf spotify-cli.tar.gz
    ```
 
@@ -27,25 +40,20 @@ Those who wish to build the `spotify-cli` tool from source can follow the instru
    cargo install --path .
    ```
 
-## todo
+### Standalone Binary for other UNIX systems
 
-### What we have worked on
+1. Download and Extract the standalone binary:
 
-- Authenticating users
-- Getting current playing track
-- Listing user's playlists
-- Getting songs from user's playlist
-- Following and unfollowing artists by ID
+   ```sh
+   wget https://github.com/kidskoding/spotify-cli/releases/download/v0.1.3-alpha/spotify-cli.tar
+   tar -xvf spotify-cli.tar
+   ```
 
-### What we want
+2. Move the executable to an executable binary path
 
-- [x] Playlist management: add and remove from playlist
-- [x] Follow artists by name
-- [x] Add songs to library by name
-- [x] Figure out a way to search by name and get an ID
-- [ ] Create and delete playlists
-- [x] Figure out how to put the .token in a ~/.config
-- [ ] Package the CLI tool with tarball, Homebrew, apt, etc.
+   ```sh
+   sudo mv ./spotify /usr/local/bin/spotify
+   ```
 
 ## License
 
