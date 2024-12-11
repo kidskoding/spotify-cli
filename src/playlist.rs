@@ -5,7 +5,7 @@ use rspotify::{
     prelude::{BaseClient, OAuthClient},
 };
 
-use crate::auth;
+use crate::{auth, helper};
 
 // util function to get a specific playlist from the current user by name
 async fn get_target_playlist(target_playlist: &str) -> Option<SimplifiedPlaylist> {
@@ -33,6 +33,8 @@ pub async fn list(target_playlist: &str) {
         .await
         .expect("unable to get current user!");
 
+    // if no argument was passed...
+    // print all the playlists of the current user
     if target_playlist == "" {
         let playlists = spotify.user_playlists(user.id);
 
@@ -49,6 +51,7 @@ pub async fn list(target_playlist: &str) {
         return;
     }
 
+    // else search for the playlist in the argument
     let playlist_result = get_target_playlist(target_playlist).await;
     let playlist;
     match playlist_result {
@@ -61,15 +64,18 @@ pub async fn list(target_playlist: &str) {
         }
     }
 
-    let stream = spotify.playlist(playlist.id, None, None);
-    pin_mut!(stream);
-    let playlist = stream.await.expect("unable to fetch playlist!");
+    let playlist = spotify
+        .playlist(playlist.id, None, None)
+        .await
+        .expect("unable to fetch playlist!");
 
+    // put the items in the playlist into a vec...
     let mut playable_items = Vec::new();
     for track in playlist.tracks.items {
         playable_items.push(track.track.unwrap());
     }
 
+    // get their track ids...
     let mut track_ids: Vec<TrackId> = Vec::new();
     for i in 0..playable_items.len() {
         let track_id = playable_items[i]
@@ -80,11 +86,13 @@ pub async fn list(target_playlist: &str) {
         track_ids.push(track_id);
     }
 
+    // query spotify for more info about these tracks...
     let tracks = spotify
         .tracks(track_ids, None)
         .await
         .expect("couldn't get tracks from spotify!");
 
+    // print their names
     println!("here's the tracks in {target_playlist}");
     for track in tracks {
         println!("\t{}", track.name);
@@ -107,7 +115,7 @@ pub async fn add(target_playlist: &str, target_song: &str) {
     let spotify = auth::spotify_from_token();
     let _ = spotify
         .playlist_add_items(
-            playlist.clone().id,
+            playlist.id,
             Some(
                 TrackId::from_id_or_uri(target_song)
                     .expect("invalid song id!")
@@ -118,7 +126,11 @@ pub async fn add(target_playlist: &str, target_song: &str) {
         .await
         .expect("couldn't add item to playlist!");
 
-    println!("succesfully added {} to {}", target_song, playlist.name);
+    println!(
+        "succesfully added {} to {}",
+        helper::parse_track_id(target_song).await.to_string(),
+        playlist.name
+    );
 }
 
 pub async fn remove(target_playlist: &str, target_song: &str) {
@@ -150,7 +162,8 @@ pub async fn remove(target_playlist: &str, target_song: &str) {
 
     println!(
         "successfully removed {} from {}",
-        target_song, playlist.name
+        helper::parse_track_id(target_song).await.to_string(),
+        playlist.name
     );
 }
 
