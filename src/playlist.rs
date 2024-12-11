@@ -7,6 +7,7 @@ use rspotify::{
 
 use crate::auth;
 
+// util function to get a specific playlist from the current user by name
 async fn get_target_playlist(target_playlist: &str) -> Option<SimplifiedPlaylist> {
     let spotify = auth::spotify_from_token();
     let playlists = spotify.current_user_playlists();

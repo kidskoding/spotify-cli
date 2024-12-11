@@ -15,7 +15,10 @@ pub async fn follow(id: &str) {
 
     match result {
         Ok(_) => {
-            println!("successfully followed {} with an id of {}", artist.name, artist_id);
+            println!(
+                "successfully followed {} with an id of {}",
+                artist.name, artist_id
+            );
         }
         Err(x) => {
             println!("{}", x);
@@ -34,7 +37,10 @@ pub async fn unfollow(id: &str) {
 
     match result {
         Ok(_) => {
-            println!("successfully unfollowed {} with an id of {}", artist.name, artist_id);
+            println!(
+                "successfully unfollowed {} with an id of {}",
+                artist.name, artist_id
+            );
         }
         Err(x) => {
             println!("{}", x);
