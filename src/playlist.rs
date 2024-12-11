@@ -99,7 +99,7 @@ pub async fn list(target_playlist: &str) {
     }
 }
 
-pub async fn add(target_playlist: &str, target_song: &str) {
+pub async fn add(target_playlist: &str, track_id: &str) {
     let playlist_result = get_target_playlist(target_playlist).await;
     let playlist;
     match playlist_result {
@@ -117,7 +117,7 @@ pub async fn add(target_playlist: &str, target_song: &str) {
         .playlist_add_items(
             playlist.id,
             Some(
-                TrackId::from_id_or_uri(target_song)
+                TrackId::from_id_or_uri(track_id)
                     .expect("invalid song id!")
                     .into(),
             ),
@@ -128,12 +128,12 @@ pub async fn add(target_playlist: &str, target_song: &str) {
 
     println!(
         "succesfully added {} to {}",
-        Song::new(target_song).await.to_string(),
+        Song::new(track_id).await.to_string(),
         playlist.name
     );
 }
 
-pub async fn remove(target_playlist: &str, target_song: &str) {
+pub async fn remove(target_playlist: &str, track_id: &str) {
     let playlist_result = get_target_playlist(target_playlist).await;
     let playlist;
     match playlist_result {
@@ -151,7 +151,7 @@ pub async fn remove(target_playlist: &str, target_song: &str) {
         .playlist_remove_all_occurrences_of_items(
             playlist.id,
             Some(
-                TrackId::from_id_or_uri(target_song)
+                TrackId::from_id_or_uri(track_id)
                     .expect("invalid song id!")
                     .into(),
             ),
@@ -162,7 +162,7 @@ pub async fn remove(target_playlist: &str, target_song: &str) {
 
     println!(
         "helpersuccessfully removed {} from {}",
-        Song::new(target_song).await.to_string(),
+        Song::new(track_id).await.to_string(),
         playlist.name
     );
 }
