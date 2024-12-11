@@ -26,27 +26,33 @@ struct Cli {
 #[derive(Subcommand, Debug)]
 enum Commands {
 
+    Version,
+
+    // authenticate the user
     Auth,
 
+    // get the current playing song
     Status,
 
+    // follow an artist
     #[command(arg_required_else_help = true)]
     Follow {
         artist: String,
     },
+
+    // unfollow an artist
     #[command(arg_required_else_help = true)]
     Unfollow {
         artist: String,
     },
-    Version,
     
-    // like track from id
+    // add track to liked songs
     #[command(arg_required_else_help = true)]
     Add {
         track: String,
     },
 
-    // unlike track from id
+    // remove track from liked songs
     #[command(arg_required_else_help = true)]
     Remove {
         track: String,
@@ -68,8 +74,11 @@ enum Commands {
 
 #[tokio::main]
 async fn main() {
+
+    // parse which command we got...
     let cli = Cli::parse();
 
+    // match it against the list of possible commands
     match &cli.command {
         Commands::Auth => {
             auth::auth().await;
@@ -93,6 +102,8 @@ async fn main() {
             ref first,
             ref second,
         } => match command.as_str() {
+            
+            // list songs in a playlist, or all your playlists if no argument is provided
             "list" => {
                 if second != "" {
                     println!("too many arguments! playlist list Option(<playlist_name>)");
@@ -100,6 +111,8 @@ async fn main() {
                 }
                 playlist::list(&first).await;
             }
+            
+            // add track to playlist
             "add" => {
                 if first == "" || second == "" {
                     println!("not enough arguments! usage: playlist add <playlist> <track>");
@@ -108,6 +121,8 @@ async fn main() {
                 let track_id = search::search(second, SearchType::Track).await;
                 playlist::add(&first, &track_id).await;
             }
+
+            // remove track from playlist
             "remove" => {
                 if first == "" || second == "" {
                     println!("not enough arguments! usage: playlist remove <playlist> <track>");
@@ -116,6 +131,8 @@ async fn main() {
                 let track_id = search::search(second, SearchType::Track).await;
                 playlist::remove(&first, &track_id).await;
             }
+
+            // create a new playlist
             "create" => {
                 if first == "" {
                     println!("not enough arguments! usage: playlist create <playlist>");
@@ -123,6 +140,8 @@ async fn main() {
                 }
                 playlist::create(&first).await;
             }
+
+            // delete (unfollow) an existing playlist
             "delete" => {
                 if first == "" {
                     println!("not enough arguments! usage: playlist delete <playlist>");
@@ -130,6 +149,8 @@ async fn main() {
                 }
                 playlist::delete(&first).await;
             }
+
+            // rename an existing playlist
             "rename" => {
                 if first == "" || second == "" {
                     println!("not enough arguments! usage: playlist rename <old_name> <new_name>");
@@ -137,6 +158,8 @@ async fn main() {
                 }
                 playlist::rename(&first, &second).await;
             }
+
+            // change the description on a playlist
             "update" => {
                 if first == "" || second == "" {
                     println!("not enough arguments! usage: playlist update <playlist> <description>");
@@ -144,6 +167,8 @@ async fn main() {
                 }
                 playlist::update_description(&first, &second).await;
             }
+
+            // no valid subcommand matched
             _ => {
                 println!("invalid command! valid commands are 'list', 'add', 'remove', 'create', 'delete', 'rename', and 'update'");
             }
