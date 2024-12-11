@@ -1,5 +1,4 @@
-use rspotify::model::PlayableItem;
-use rspotify::prelude::BaseClient;
+use rspotify::model::{Id, PlayableItem};
 use rspotify::{clients::OAuthClient, model::AdditionalType};
 
 use crate::auth;
@@ -40,24 +39,8 @@ async fn get_current_song() -> Result<Song, String> {
         Some(x) => x.item.unwrap(),
     };
 
-    let current_song = spotify
-        .track(
-            playable_item
-                .id()
-                .unwrap()
-                .try_into()
-                .expect("invalid track"),
-            None,
-        )
-        .await
-        .expect("error connecting to spotify");
-
-    let name = current_song.name;
-    let artists = current_song.artists;
-    let album = current_song.album;
-
-    let song = Song::new(name, artists, album);
-
+    let track_id = playable_item.id().unwrap();
+    let song = Song::new(track_id.id()).await;
     Ok(song)
 }
 
@@ -76,19 +59,8 @@ async fn get_next_song() -> Result<Song, String> {
 
     let next_song = match next_track {
         PlayableItem::Track(track) => {
-            let track = spotify
-                .track(
-                    track.id.clone().unwrap().try_into().expect("invalid track"),
-                    None,
-                )
-                .await
-                .expect("error connecting to spotify");
-
-            let name = track.name;
-            let artists = track.artists;
-            let album = track.album;
-
-            Song::new(name, artists, album)
+            let track_id = track.id.as_ref().expect("couldn't get track id!");
+            Song::new(track_id.id()).await
         }
         PlayableItem::Episode(_) => {
             return Err(String::from("next in queue: none"));

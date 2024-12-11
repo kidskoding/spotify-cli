@@ -1,14 +1,13 @@
 use rspotify::clients::OAuthClient;
 use rspotify::model::TrackId;
 
-use crate::auth;
-use crate::song::Song;
+use crate::{auth, song::Song};
 
-pub async fn add(track_pair: (&str, Song)) {
+pub async fn add(track_id: &str) {
     let spotify = auth::spotify_from_token();
 
     let mut tracks = Vec::new();
-    tracks.push(TrackId::from_id_or_uri(track_pair.0).expect("invalid track id!"));
+    tracks.push(TrackId::from_id_or_uri(track_id).expect("invalid track id!"));
     let _ = spotify
         .current_user_saved_tracks_add(tracks)
         .await
@@ -16,16 +15,16 @@ pub async fn add(track_pair: (&str, Song)) {
 
     println!(
         "successfully added {} with an id of {} to library!",
-        track_pair.1.to_string(),
-        track_pair.0
+        Song::new(track_id).await.to_string(),
+        track_id
     );
 }
 
-pub async fn remove(track_pair: (&str, Song)) {
+pub async fn remove(track_id: &str) {
     let spotify = auth::spotify_from_token();
 
     let mut tracks = Vec::new();
-    tracks.push(TrackId::from_id_or_uri(track_pair.0).expect("invalid track id!"));
+    tracks.push(TrackId::from_id_or_uri(track_id).expect("invalid track id!"));
     let _ = spotify
         .current_user_saved_tracks_delete(tracks)
         .await
@@ -33,7 +32,7 @@ pub async fn remove(track_pair: (&str, Song)) {
 
     println!(
         "successfully removed {} with an id of {} from library!",
-        track_pair.1.to_string(),
-        track_pair.0
+        Song::new(track_id).await.to_string(),
+        track_id
     );
 }

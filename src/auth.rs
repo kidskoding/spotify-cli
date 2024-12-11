@@ -5,20 +5,9 @@ use std::fs::{self, File};
 use std::io::{Read, Write};
 use std::sync::Arc;
 
+// authenticate a user and write their token to ~/.config/spotify-cli/
 pub async fn auth() {
-    //let creds = Credentials::from_env().unwrap();
-    //let oauth = OAuth::from_env(scopes!(
-    //    "user-read-playback-state",
-    //    "user-modify-playback-state",
-    //    "user-follow-modify",
-    //    "playlist-modify-public",
-    //    "playlist-modify-private",
-    //    "playlist-read-private",
-    //    "playlist-read-collaborative",
-    //    "user-library-modify"
-    //))
-    //.unwrap();
-
+    // hardcode values for spotify api...
     let creds = Credentials::new(
         "79dcd16ca7aa440dbd287cb41288888f",
         "912383c81e8e444e83b2963d48fdfb2f",
@@ -27,7 +16,6 @@ pub async fn auth() {
         redirect_uri: "http://localhost:8000/callback".to_string(),
         scopes: scopes!(
             "user-read-playback-state",
-            "user-modify-playback-state",
             "user-follow-modify",
             "playlist-modify-private",
             "playlist-modify-public",
@@ -38,6 +26,7 @@ pub async fn auth() {
         ..Default::default()
     };
 
+    // function to write the auth token we get to ~/.config/spotify-cli/
     let write_token_to_file = |token: Token| {
         let config_path = dirs::home_dir()
             .expect("Unable to find home directory")
@@ -54,19 +43,22 @@ pub async fn auth() {
         );
         Ok(())
     };
+
+    // tell it to call this function when we get the token
     let token_callback = TokenCallback(Box::new(write_token_to_file));
 
-    // Enabling automatic token refreshing in the config
+    // enabling automatic token refreshing in the config
     let config = Config {
         token_callback_fn: Arc::new(Some(token_callback)),
         ..Default::default()
     };
 
+    // create a spotify object with our settings
     println!(">>> Fetch token with AuthCodeSpotify");
     let spotify = AuthCodeSpotify::with_config(creds, oauth, config);
     let url = spotify.get_authorize_url(false).unwrap();
 
-    // This function requires the `cli` feature enabled.
+    // prompt the user
     spotify
         .prompt_for_token(&url)
         .await
@@ -75,6 +67,7 @@ pub async fn auth() {
     println!(">>> authentication completed!");
 }
 
+// return a spotify instance from a token
 pub fn spotify_from_token() -> AuthCodeSpotify {
     let config_path = dirs::home_dir()
         .expect("Unable to find home directory")
@@ -84,9 +77,10 @@ pub fn spotify_from_token() -> AuthCodeSpotify {
         "couldn't find .token file in {}, maybe try running 'spotify auth' first?",
         config_path.display()
     ));
+
     let mut contents = String::new();
     let _ = file.read_to_string(&mut contents);
-    let token = serde_json::from_str(&contents).unwrap();
 
+    let token = serde_json::from_str(&contents).unwrap();
     AuthCodeSpotify::from_token(token)
 }

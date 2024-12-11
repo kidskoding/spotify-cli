@@ -1,4 +1,7 @@
-use rspotify::model::{SimplifiedAlbum, SimplifiedArtist};
+use crate::auth;
+
+use rspotify::clients::BaseClient;
+use rspotify::model::{SimplifiedAlbum, SimplifiedArtist, TrackId};
 
 pub struct Song {
     name: String,
@@ -7,11 +10,19 @@ pub struct Song {
 }
 
 impl Song {
-    pub fn new(name: String, artists: Vec<SimplifiedArtist>, album: SimplifiedAlbum) -> Self {
+    pub async fn new(track_id: &str) -> Self {
+        let spotify = auth::spotify_from_token();
+        let track = spotify
+            .track(
+                TrackId::from_id_or_uri(track_id).expect("invalid track id!"),
+                None,
+            )
+            .await
+            .expect("error fetching track!");
         Song {
-            name,
-            artists,
-            album,
+            name: track.name,
+            artists: track.artists,
+            album: track.album,
         }
     }
 
