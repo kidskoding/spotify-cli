@@ -189,3 +189,29 @@ pub async fn delete(playlist_name: &str) {
 
     println!("successfully deleted playlist {}", playlist_name);
 }
+
+pub async fn rename(old_name: &str, new_name: &str) {
+    let playlist_result = get_target_playlist(old_name).await;
+    let playlist;
+    let spotify = auth::spotify_from_token();
+    match playlist_result {
+        None => {
+            println!("could not find playlist {}", old_name);
+            return;
+        }
+        Some(x) => {
+            playlist = x;
+        }
+    }
+
+    spotify
+        .playlist_change_detail(playlist.id, Some(new_name), None, None, None)
+        .await
+        .expect("Cannot change name of playlist!");
+
+    println!(
+        "succesfully renamed playlist from {} to {}",
+        playlist.name, new_name
+    );
+    println!("this might take a while for your changes to be reflected");
+}
