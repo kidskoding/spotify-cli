@@ -233,5 +233,11 @@ pub async fn update_description(playlist_name: &str, desc: &str) {
     spotify
         .playlist_change_detail(playlist.id, None, None, Some(desc), None)
         .await
-        .expect("Cannot change name of playlist!");
+        .expect("could not update playlist description!");
+
+    println!(
+        "succesfully updated playlist {}'s description to {}",
+        playlist.name, desc
+    );
+    println!("this might take a while for your changes to be reflected");
 }

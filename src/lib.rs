@@ -3,14 +3,13 @@ use futures_util::pin_mut;
 use rspotify::{
     model::{Country, Market, PlaylistId, PlaylistItem, SimplifiedPlaylist, UserId},
     prelude::*,
-    AuthCodeSpotify, ClientCredsSpotify,
+    AuthCodeSpotify,
 };
 
-pub async fn playlists_list(
-    spotify: ClientCredsSpotify,
-    user_id: UserId<'_>,
+pub async fn user_playlists_list(
+    spotify: AuthCodeSpotify,
 ) -> Vec<SimplifiedPlaylist> {
-    let stream = spotify.user_playlists(user_id);
+    let stream = spotify. current_user_playlists();
     pin_mut!(stream);
     let mut playlist_list = Vec::new();
     while let Some(item) = stream.try_next().await.unwrap() {
