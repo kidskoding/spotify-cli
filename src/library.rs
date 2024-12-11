@@ -1,7 +1,7 @@
 use rspotify::clients::OAuthClient;
 use rspotify::model::TrackId;
 
-use crate::{auth, helper};
+use crate::{auth, song::Song};
 
 pub async fn add(track_id: &str) {
     let spotify = auth::spotify_from_token();
@@ -15,7 +15,7 @@ pub async fn add(track_id: &str) {
 
     println!(
         "successfully added {} with an id of {} to library!",
-        helper::parse_track_id(track_id).await.to_string(),
+        Song::new(track_id).await.to_string(),
         track_id
     );
 }
@@ -32,7 +32,7 @@ pub async fn remove(track_id: &str) {
 
     println!(
         "successfully removed {} with an id of {} from library!",
-        helper::parse_track_id(track_id).await.to_string(),
+        Song::new(track_id).await.to_string(),
         track_id
     );
 }

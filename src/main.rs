@@ -7,7 +7,7 @@ mod library;
 mod playlist;
 mod status;
 mod search;
-mod helper;
+mod song;
 
 #[derive(Parser, Debug)]
 #[command(

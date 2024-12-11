@@ -5,7 +5,7 @@ use rspotify::{
     prelude::{BaseClient, OAuthClient},
 };
 
-use crate::{auth, helper};
+use crate::{auth, song::Song};
 
 // util function to get a specific playlist from the current user by name
 async fn get_target_playlist(target_playlist: &str) -> Option<SimplifiedPlaylist> {
@@ -128,7 +128,7 @@ pub async fn add(target_playlist: &str, target_song: &str) {
 
     println!(
         "succesfully added {} to {}",
-        helper::parse_track_id(target_song).await.to_string(),
+        Song::new(target_song).await.to_string(),
         playlist.name
     );
 }
@@ -161,8 +161,8 @@ pub async fn remove(target_playlist: &str, target_song: &str) {
         .expect("couldn't remove song from playlist!");
 
     println!(
-        "successfully removed {} from {}",
-        helper::parse_track_id(target_song).await.to_string(),
+        "helpersuccessfully removed {} from {}",
+        Song::new(target_song).await.to_string(),
         playlist.name
     );
 }
