@@ -1,6 +1,4 @@
-# RUN.md
-
-## Downloading and Installing the `spotify-cli` tool
+# Downloading and Installing the `spotify-cli` tool
 
 ### Source
 
@@ -66,3 +64,5 @@ For macOS users, the `spotify-cli` tool can be easily installed using [Homebrew]
    ```sh
    sudo mv ./spotify /usr/local/bin/spotify
    ```
+
+#### Run the spotify command by type `spotify` in your terminal!
