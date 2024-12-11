@@ -6,7 +6,6 @@ mod follow;
 mod library;
 mod playlist;
 mod status;
-mod volume;
 mod song;
 mod search;
 mod helper;
@@ -26,12 +25,11 @@ struct Cli {
 
 #[derive(Subcommand, Debug)]
 enum Commands {
+
     Auth,
+
     Status,
-    #[command(arg_required_else_help = true)]
-    Volume {
-        volume_delta: i8,
-    },
+
     #[command(arg_required_else_help = true)]
     Follow {
         artist: String,
@@ -65,6 +63,7 @@ enum Commands {
         #[clap(default_value = "", index = 3)]
         second: String,
     },
+
 }
 
 #[tokio::main]
@@ -77,9 +76,6 @@ async fn main() {
         }
         Commands::Status => {
             println!("{}", status::status().await);
-        }
-        Commands::Volume { volume_delta } => {
-            volume::change_volume(*volume_delta).await;
         }
         Commands::Follow { artist } => {
             let artist_id = search::search(artist, SearchType::Artist).await;
