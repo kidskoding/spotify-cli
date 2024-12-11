@@ -30,10 +30,10 @@ Those who wish to build the `spotify-cli` tool from source can follow the instru
    cargo run
    ```
 
-   > [!NOTE]
-   > This CLI program only works with specific Spotify accounts. You can login
-   > to a testing account with the following credentials:
-   > `Email="samplemail490@gmail.com"`, `password="samplepass!"`
+> [!NOTE]
+> This CLI program only works with specific Spotify accounts. You can login
+> to a testing account with the following credentials:
+> `Email="samplemail490@gmail.com"`, `password="samplepass!"`
 
 ### macOS
 
