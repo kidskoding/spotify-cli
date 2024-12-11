@@ -1,4 +1,4 @@
-# run.md 
+# RUN.md
 
 ## Downloading and Installing the `spotify-cli` tool
 
