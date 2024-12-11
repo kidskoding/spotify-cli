@@ -14,7 +14,11 @@ pub async fn add(track_pair: (&str, Song)) {
         .await
         .expect("error adding track to library!");
 
-    println!("successfully added {} with an id of {} to library!", track_pair.1.to_string(), track_pair.0);
+    println!(
+        "successfully added {} with an id of {} to library!",
+        track_pair.1.to_string(),
+        track_pair.0
+    );
 }
 
 pub async fn remove(track_pair: (&str, Song)) {
@@ -27,5 +31,9 @@ pub async fn remove(track_pair: (&str, Song)) {
         .await
         .expect("error removing track from library!");
 
-    println!("successfully removed {} with an id of {} from library!", track_pair.1.to_string(), track_pair.0);
+    println!(
+        "successfully removed {} with an id of {} from library!",
+        track_pair.1.to_string(),
+        track_pair.0
+    );
 }
