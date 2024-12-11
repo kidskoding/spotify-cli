@@ -161,7 +161,7 @@ pub async fn remove(target_playlist: &str, track_id: &str) {
         .expect("couldn't remove song from playlist!");
 
     println!(
-        "helpersuccessfully removed {} from {}",
+        "successfully removed {} from {}",
         Song::new(track_id).await.to_string(),
         playlist.name
     );
