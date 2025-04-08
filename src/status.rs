@@ -23,7 +23,7 @@ pub async fn status() -> String {
     status
 }
 
-async fn get_current_song() -> Result<Song, String> {
+pub async fn get_current_song() -> Result<Song, String> {
     let spotify = auth::spotify_from_token();
 
     let additional_types = [AdditionalType::Track];
@@ -44,7 +44,7 @@ async fn get_current_song() -> Result<Song, String> {
     Ok(song)
 }
 
-async fn get_next_song() -> Result<Song, String> {
+pub async fn get_next_song() -> Result<Song, String> {
     let spotify = auth::spotify_from_token();
 
     let queue = spotify

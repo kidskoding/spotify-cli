@@ -21,7 +21,10 @@ pub async fn auth() {
             "playlist-modify-public",
             "playlist-read-private",
             "playlist-read-collaborative",
-            "user-library-modify"
+            "user-library-modify",
+            "user-modify-playback-state",
+            "streaming",
+            "user-read-currently-playing"
         ),
         ..Default::default()
     };

@@ -8,6 +8,7 @@ mod playlist;
 mod status;
 mod search;
 mod song;
+mod track;
 
 #[derive(Parser, Debug)]
 #[command(
@@ -24,7 +25,6 @@ struct Cli {
 
 #[derive(Subcommand, Debug)]
 enum Command {
-
     Version,
 
     // authenticate the user
@@ -33,18 +33,12 @@ enum Command {
     // get the current playing song
     Status,
 
-    // follow an artist
+    // play the current song
     #[command(arg_required_else_help = true)]
-    Follow {
-        artist: String,
+    Play {
+        track: String,
     },
 
-    // unfollow an artist
-    #[command(arg_required_else_help = true)]
-    Unfollow {
-        artist: String,
-    },
-    
     // add track to liked songs
     #[command(arg_required_else_help = true)]
     Add {
@@ -55,6 +49,18 @@ enum Command {
     #[command(arg_required_else_help = true)]
     Remove {
         track: String,
+    },
+    
+    // follow an artist
+    #[command(arg_required_else_help = true)]
+    Follow {
+        artist: String,
+    },
+
+    // unfollow an artist
+    #[command(arg_required_else_help = true)]
+    Unfollow {
+        artist: String,
     },
 
     // various commands related to controlling playlists
@@ -68,17 +74,15 @@ enum Command {
         #[clap(default_value = "", index = 3)]
         second: String,
     },
-
 }
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-
     // parse which command we got...
     let cli = Cli::parse();
     let command = match &cli.command {
         Some(cmd) => cmd,
-        None => return Err("no command was provided! try 'spotify --help' for a list of commands".into()),
+        None => return Err("no command was provided! try 'spotify help' for a list of commands".into()),
     };
 
     // match it against the list of possible commands
@@ -88,6 +92,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         Command::Status => {
             println!("{}", status::status().await);
+        }
+        Command::Play { track } => {
+            let track_id = search::search(track, SearchType::Track).await;
+            track::play_track(&track_id).await;
         }
         Command::Follow { artist } => {
             let artist_id = search::search(artist, SearchType::Artist).await;
