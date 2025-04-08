@@ -80,6 +80,7 @@ Those who wish to build the `spotify-cli` tool from source can follow the instru
 
    ```sh
    cd spotify-cli/
+   cargo build --release
    cargo install --path .
    ```
 
