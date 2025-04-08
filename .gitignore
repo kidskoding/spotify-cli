@@ -5,9 +5,10 @@ spotify.1
 
 main.backup.rs
 *.tar.gz
-Cargo.lock
 
 # for macOS
 .DS_Store
 
 .idea/
+
+Cargo.lock

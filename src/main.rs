@@ -19,11 +19,11 @@ mod song;
 )]
 struct Cli {
     #[command(subcommand)]
-    command: Commands,
+    command: Option<Command>,
 }
 
 #[derive(Subcommand, Debug)]
-enum Commands {
+enum Command {
 
     Version,
 
@@ -72,113 +72,118 @@ enum Commands {
 }
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // parse which command we got...
     let cli = Cli::parse();
+    let command = match &cli.command {
+        Some(cmd) => cmd,
+        None => return Err("no command was provided! try 'spotify --help' for a list of commands".into()),
+    };
 
     // match it against the list of possible commands
-    match &cli.command {
-        Commands::Auth => {
+    match command {
+        Command::Auth => {
             auth::auth().await;
         }
-        Commands::Status => {
+        Command::Status => {
             println!("{}", status::status().await);
         }
-        Commands::Follow { artist } => {
+        Command::Follow { artist } => {
             let artist_id = search::search(artist, SearchType::Artist).await;
             follow::follow(&artist_id).await;
         }
-        Commands::Unfollow { artist } => {
+        Command::Unfollow { artist } => {
             let artist_id = search::search(artist, SearchType::Artist).await;
             follow::unfollow(&artist_id).await;
         }
-        Commands::Version => {
+        Command::Version => {
             print!("{}", Cli::command().render_version());
         }
-        Commands::Playlist {
+        Command::Playlist {
             ref command,
             ref first,
             ref second,
         } => match command.as_str() {
-            
-            // list songs in a playlist, or all your playlists if no argument is provided
-            "list" => {
-                if second != "" {
-                    println!("too many arguments! playlist list Option(<playlist_name>)");
-                    return;
+                // list songs in a playlist, or all your playlists if no argument is provided
+                "list" => {
+                    if second != "" {
+                        println!("too many arguments! playlist list Option(<playlist_name>)");
+                        return Ok(());
+                    }
+                    playlist::list(&first).await;
                 }
-                playlist::list(&first).await;
-            }
-            
-            // add track to playlist
-            "add" => {
-                if first == "" || second == "" {
-                    println!("not enough arguments! usage: playlist add <playlist> <track>");
-                    return;
+                
+                // add track to playlist
+                "add" => {
+                    if first == "" || second == "" {
+                        println!("not enough arguments! usage: playlist add <playlist> <track>");
+                        return Ok(());
+                    }
+                    let track_id = search::search(second, SearchType::Track).await;
+                    playlist::add(&first, &track_id).await;
                 }
-                let track_id = search::search(second, SearchType::Track).await;
-                playlist::add(&first, &track_id).await;
-            }
 
-            // remove track from playlist
-            "remove" => {
-                if first == "" || second == "" {
-                    println!("not enough arguments! usage: playlist remove <playlist> <track>");
-                    return;
+                // remove track from playlist
+                "remove" => {
+                    if first == "" || second == "" {
+                        println!("not enough arguments! usage: playlist remove <playlist> <track>");
+                        return Ok(());
+                    }
+                    let track_id = search::search(second, SearchType::Track).await;
+                    playlist::remove(&first, &track_id).await;
                 }
-                let track_id = search::search(second, SearchType::Track).await;
-                playlist::remove(&first, &track_id).await;
-            }
 
-            // create a new playlist
-            "create" => {
-                if first == "" {
-                    println!("not enough arguments! usage: playlist create <playlist>");
-                    return;
+                // create a new playlist
+                "create" => {
+                    if first == "" {
+                        println!("not enough arguments! usage: playlist create <playlist>");
+                        return Ok(());
+                    }
+                    playlist::create(&first).await;
                 }
-                playlist::create(&first).await;
-            }
 
-            // delete (unfollow) an existing playlist
-            "delete" => {
-                if first == "" {
-                    println!("not enough arguments! usage: playlist delete <playlist>");
-                    return;
+                // delete (unfollow) an existing playlist
+                "delete" => {
+                    if first == "" {
+                        println!("not enough arguments! usage: playlist delete <playlist>");
+                        return Ok(());
+                    }
+                    playlist::delete(&first).await;
                 }
-                playlist::delete(&first).await;
-            }
 
-            // rename an existing playlist
-            "rename" => {
-                if first == "" || second == "" {
-                    println!("not enough arguments! usage: playlist rename <old_name> <new_name>");
-                    return;
+                // rename an existing playlist
+                "rename" => {
+                    if first == "" || second == "" {
+                        println!("not enough arguments! usage: playlist rename <old_name> <new_name>");
+                        return Ok(());
+                    }
+                    playlist::rename(&first, &second).await;
                 }
-                playlist::rename(&first, &second).await;
-            }
 
-            // change the description on a playlist
-            "update" => {
-                if first == "" || second == "" {
-                    println!("not enough arguments! usage: playlist update <playlist> <description>");
-                    return;
+                // change the description on a playlist
+                "update" => {
+                    if first == "" || second == "" {
+                        println!("not enough arguments! usage: playlist update <playlist> <description>");
+                        return Ok(());
+                    }
+                    playlist::update_description(&first, &second).await;
                 }
-                playlist::update_description(&first, &second).await;
-            }
 
-            // no valid subcommand matched
-            _ => {
-                println!("invalid command! valid commands are 'list', 'add', 'remove', 'create', 'delete', 'rename', and 'update'");
-            }
+                // no valid subcommand matched
+                _ => {
+                    println!("invalid command! valid commands are 'list', 'add', 'remove', 'create', 'delete', 'rename', and 'update'");
+                }
         },
-        Commands::Add { ref track } => {
+        Command::Add { ref track } => {
             let track_id = search::search(track, SearchType::Track).await;
             library::add(&track_id).await;
         }
-        Commands::Remove { ref track } => {
+        Command::Remove { ref track } => {
             let track_id = search::search(track, SearchType::Track).await;
             library::remove(&track_id).await;
         }
-    }
+    };
+
+    Ok(())
 }
