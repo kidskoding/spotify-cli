@@ -9,11 +9,11 @@ use std::sync::Arc;
 pub async fn auth() {
     // hardcode values for spotify api...
     let creds = Credentials::new(
-        "79dcd16ca7aa440dbd287cb41288888f",
-        "912383c81e8e444e83b2963d48fdfb2f",
+        "012ab427c95c45bfbe3e62bff4be1401",
+        "5ac7b44df089472cb081b6db891d4e26",
     );
     let oauth = OAuth {
-        redirect_uri: "http://localhost:8000/callback".to_string(),
+        redirect_uri: "http://127.0.0.1:8888/callback".to_string(),
         scopes: scopes!(
             "user-read-playback-state",
             "user-follow-modify",
