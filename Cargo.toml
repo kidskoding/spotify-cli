@@ -7,6 +7,7 @@ description = "UIUC CS 128 Honors FA 2024 Final Project - A Command Line Interfa
 license = "MIT"
 repository = "https://github.com/kidskoding/spotify-cli"
 homepage = "https://github.com/kidskoding/spotify-cli"
+keywords = ["spotify", "cli", "music"]
 default-run = "spotify"
 
 [[bin]]
