@@ -45,6 +45,17 @@ file for details
 
 ## Installing and Running the `spotify-cli` tool
 
+### `cargo`
+
+Crate is now published on crates.io! Check it out! [here](https://crates.io/crates/spotify-cli-rs)
+
+1. Install Rust [here](https://rustup.rs/) 
+2. Use `cargo` to install the spotify cli
+
+   ```sh
+   cargo install spotify-cli-rs
+   ```
+
 ### macOS
 
 For macOS users, the `spotify-cli` tool can be easily installed using [Homebrew](https://brew.sh/)
