@@ -2,6 +2,8 @@
 name = "spotify-cli"
 version = "1.0.0"
 edition = "2021"
+authors = ["Anirudh Konidala", "Canchen Li"]
+description = "UIUC CS 128 Honors FA 2024 Final Project - A Command Line Interface (CLI) tool for Spotify built using Rust" 
 default-run = "spotify"
 
 [[bin]]
