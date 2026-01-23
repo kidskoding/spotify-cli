@@ -4,6 +4,11 @@ version = "1.0.0"
 edition = "2021"
 authors = ["Anirudh Konidala", "Canchen Li"]
 description = "UIUC CS 128 Honors FA 2024 Final Project - A Command Line Interface (CLI) tool for Spotify built using Rust" 
+license = "MIT"
+repository = "https://github.com/kidskoding/spotify-cli"
+homepage = "https://github.com/kidskoding/spotify-cli"
+keywords = ["spotify", "cli", "music"]
+categories = ["audio", "command-line-utilities"]
 default-run = "spotify"
 
 [[bin]]
