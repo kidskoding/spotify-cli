@@ -1,5 +1,5 @@
 [package]
-name = "spotify-cli"
+name = "spotify-cli-rs"
 version = "1.0.0"
 edition = "2021"
 authors = ["Anirudh Konidala", "Canchen Li"]

@@ -1467,7 +1467,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "spotify-cli"
+name = "spotify-cli-rs"
 version = "1.0.0"
 dependencies = [
  "clap",
