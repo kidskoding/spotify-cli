@@ -1,5 +1,5 @@
 use rspotify::{model::{PlayableId, TrackId}, prelude::OAuthClient};
-use crate::{auth, song::Song, status::{get_current_song, get_next_song}};
+use crate::{auth, song::Song, status::get_next_song};
 
 pub async fn play_track(track: &String) {
     let spotify = auth::spotify_from_token();
